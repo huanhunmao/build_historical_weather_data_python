@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 df = pd.read_csv('data_small/TG_STAID000001.txt', skiprows=20, parse_dates=['    DATE'])
 
@@ -21,7 +22,13 @@ df = pd.read_csv('data_small/TG_STAID000001.txt', skiprows=20, parse_dates=['   
 # print(df.loc[df['   TG'] != -9999]['   TG'].mean() / 10) # 6.360787526128467
 
 # 拿最大值
-print(df.loc[df['   TG'] != -9999]['   TG'].max() / 10) # 26.2
+# print(df.loc[df['   TG'] != -9999]['   TG'].max() / 10) # 26.2
 
 # 拿最小值
-print(df.loc[df['   TG'] != -9999]['   TG'].min() / 10) # -28.8
+# print(df.loc[df['   TG'] != -9999]['   TG'].min() / 10) # -28.8
+
+# 直方图
+# df['   TG'].hist() 这个是错误的 因为没有过滤掉 -9999
+df.loc[df['   TG'] != -9999]['   TG'].hist()
+plt.show()  # 确保绘图展示出来
+
