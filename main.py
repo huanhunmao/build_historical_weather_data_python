@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import  pandas as pd
 
 app = Flask(__name__)
 
@@ -6,12 +7,16 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/api/v1/<word>')
-def about(word):
-    definition = word.upper()
+@app.route('/api/v1/<station>/<date>')
+def about(station, date):
+    filename = 'data_small/TG_STAID' + str(station).zfill(6) + '.txt'
+    df = pd.read_csv(filename, skiprows=20, parse_dates=['    DATE'])
+    temperature = df.loc[df['    DATE'] == date]['   TG'].squeeze() / 10
+
     return {
-        "definition": definition,
-        "word": word
+        "station": station,
+        "date": date,
+        "temperature": temperature
     }
 
 # 确保当这个脚本文件被直接运行时，才会执行 app.run(debug=True) 这行代码
