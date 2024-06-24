@@ -22,6 +22,17 @@ def about(station, date):
         "temperature": temperature
     }
 
+@app.route('/api/v1/yearly/<station>/<year>')
+def yearly(station, year):
+    filename = 'data_small/TG_STAID' + str(station).zfill(6) + '.txt'
+    df = pd.read_csv(filename, skiprows=20)
+    df['    DATE'] = df['    DATE'].astype(str)
+    result = df[df['    DATE'].str.startswith(str(year))].to_dict(orient='records')
+    return result
+
+
+
+# 翻译单词功能
 @app.route('/translate')
 def translate():
     return render_template('translate.html')
@@ -33,7 +44,8 @@ def api(word):
     result_dictionary = {'word': word, 'definition': definition}
     return result_dictionary
 
+
 # 确保当这个脚本文件被直接运行时，才会执行 app.run(debug=True) 这行代码
 # 而在被导入时，这段启动代码不会执行 可导入这个脚本的其他方法使用
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5001)
